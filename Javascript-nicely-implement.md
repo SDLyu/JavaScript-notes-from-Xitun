@@ -57,3 +57,25 @@ JavaScript 查找變數的規則是，會先從區域變數找起，再往上找
     };
 })(document, window);
 ```
+
+## 5. `Underscore` 的安全引用物件（保證物件只會被包裏一次）
+
+```javascript  
+var _ = function(obj) {
+    if (obj instanceof _) return obj;
+    if (!(this instanceof _)) return new _(obj);
+    this._wrapped = obj;
+};
+```
+
+Line1：`_(obj)` 若 `obj` 已使用 `-` 呼叫初始過則直接回傳 `obj`。  
+Line2：若 `this` 不是 `_` 的實例，則呼叫 `_` 包裏 `obj` 並回傳。  
+Line3：當呼叫 `new _(obj)` 時，設定 `_wrapped` 的屬性為 `obj`。  
+
+Line2 的條件式不成立時，會重新綁定 `_wrapped`。
+
+```javascript
+var unobj = _(obj);
+unobj._();      // 重新綁定 _wrapped 至 unobj
+unobj._(unobj); // 重新綁定 _wrapped 至 unobj
+```
