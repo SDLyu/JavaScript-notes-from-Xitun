@@ -79,3 +79,24 @@ var unobj = _(obj);
 unobj._();      // 重新綁定 _wrapped 至 unobj
 unobj._(unobj); // 重新綁定 _wrapped 至 unobj
 ```
+
+## 6. Return early
+
++ 避免多餘運算。
++ 判斷參數是否合理。
+
+```javascript
+function fn(obj, iterator, context) {
+    var results = [];
+    if (obj == null) return results;  // 若參數不合理，不繼續執行下面的程式，直接回傳。
+    ...
+```
+
+## 7. 傳入的引數判斷
+
+Javascript 是動態語言，所以一個變數可以是任何類型。  
+動態類型的靈活性會帶來一些反效果。  
+例如，呼叫函數時，如何確保引數的類型是正確的。
+
++ 使用 `argumemts`
+    + 使用 `arguments.length` 在函數式判斷引數數量。
